@@ -1,0 +1,77 @@
+import java.util.Arrays;
+
+public class OptimizedQuickSort {
+
+    // Threshold: Arrays smaller than this use Insertion Sort
+    private static final int INSERTION_SORT_THRESHOLD = 10;
+
+    public static void sort(int[] array) {
+        quickSort(array, 0, array.length - 1);
+    }
+
+    private static void quickSort(int[] array, int left, int right) {
+        // Optimization 1: Use Insertion Sort for small sub-arrays
+        if (left + INSERTION_SORT_THRESHOLD > right) {
+            insertionSort(array, left, right);
+            return;
+        }
+
+        // Optimization 2: Median-of-Three pivoting
+        int pivot = medianOfThree(array, left, right);
+
+        // Partitioning (Hoare partition style)
+        int i = left, j = right - 1;
+        while (true) {
+            while (array[++i] < pivot);
+            while (array[--j] > pivot);
+            if (i < j) {
+                swap(array, i, j);
+            } else {
+                break;
+            }
+        }
+
+        // Restore pivot
+        swap(array, i, right - 1);
+
+        // Recursive calls
+        quickSort(array, left, i - 1);
+        quickSort(array, i + 1, right);
+    }
+
+    private static int medianOfThree(int[] array, int left, int right) {
+        int center = (left + right) / 2;
+
+        if (array[left] > array[center]) swap(array, left, center);
+        if (array[left] > array[right]) swap(array, left, right);
+        if (array[center] > array[right]) swap(array, center, right);
+
+        // Hide pivot: Place median at right - 1
+        swap(array, center, right - 1);
+        return array[right - 1];
+    }
+
+    private static void insertionSort(int[] array, int left, int right) {
+        for (int i = left + 1; i <= right; i++) {
+            int temp = array[i];
+            int j = i;
+            while (j > left && array[j - 1] > temp) {
+                array[j] = array[j - 1];
+                j--;
+            }
+            array[j] = temp;
+        }
+    }
+
+    private static void swap(int[] array, int i, int j) {
+        int temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+    }
+
+    public static void main(String[] args) {
+        int[] data = {24, 2, 45, 20, 56, 75, 2, 56, 99, 53, 12, 10, 8, 1};
+        sort(data);
+        System.out.println("Sorted Array: " + Arrays.toString(data));
+    }
+}
