@@ -1,0 +1,28 @@
+class Node {
+    int value;
+    Node left, right;
+
+    public Node(int item) {
+        value = item;
+        left = right = null;
+    }
+}
+
+public class BinarySearchTree {
+    Node root;
+
+    // Recursive function to insert a new key
+    Node insert(Node root, int value) {
+        if (root == null) {
+            root = new Node(value);
+            return root;
+        }
+
+        if (value < root.value)
+            root.left = insert(root.left, value);
+        else if (value > root.value)
+            root.right = insert(root.right, value);
+
+        return root;
+    }
+}
