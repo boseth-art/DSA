@@ -1,0 +1,34 @@
+public class TowerOfHanoi {
+
+    /**
+     * Recursive function to solve Tower of Hanoi puzzle
+     * @param n     Number of disks
+     * @param from  The source rod
+     * @param to    The destination rod
+     * @param aux   The auxiliary (helper) rod
+     */
+    public static void solveHanoi(int n, char from, char to, char aux) {
+        // Base Case: If there's only 1 disk, move it directly
+        if (n == 1) {
+            System.out.println("Move disk 1 from " + from + " to " + to);
+            return;
+        }
+
+        // Step 1: Move n-1 disks from source to auxiliary rod
+        solveHanoi(n - 1, from, aux, to);
+
+        // Step 2: Move the nth (largest) disk from source to destination rod
+        System.out.println("Move disk " + n + " from " + from + " to " + to);
+
+        // Step 3: Move the n-1 disks from auxiliary to destination rod
+        solveHanoi(n - 1, aux, to, from);
+    }
+
+    public static void main(String[] args) {
+        int numberOfDisks = 3; // You can change this value
+        System.out.println("Steps to solve Tower of Hanoi with " + numberOfDisks + " disks:");
+        
+        // A = Source, C = Destination, B = Auxiliary
+        solveHanoi(numberOfDisks, 'A', 'C', 'B');
+    }
+}
